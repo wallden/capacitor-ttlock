@@ -11,6 +11,8 @@ public class TTLockPlugin extends Plugin {
 
     @PluginMethod()
     public void echo(PluginCall call) {
+         TTLockClient.getDefault().prepareBTService(getApplicationContext());
+//https://gitee.com/sciener/Android-TTLock-SDK-V3-Demo
         String value = call.getString("value");
 
         JSObject ret = new JSObject();
