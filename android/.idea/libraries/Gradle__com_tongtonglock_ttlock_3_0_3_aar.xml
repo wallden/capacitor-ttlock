@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Gradle: com.tongtonglock:ttlock:3.0.3@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/1b1e342aa5101e7b102d8da19beca5f8/jetified-ttlock-3.0.3/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/1b1e342aa5101e7b102d8da19beca5f8/jetified-ttlock-3.0.3/res" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.tongtonglock/ttlock/3.0.3/215ddfadc7533e7c7a950d22b458a6fe064fad1d/ttlock-3.0.3-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.tongtonglock/ttlock/3.0.3/bd328046347b1dbe6b3227e0a32fdc0c0a470d8b/ttlock-3.0.3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
