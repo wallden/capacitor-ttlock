@@ -1,6 +1,7 @@
 package se.pubq.ttlock;
 
 import android.Manifest;
+import android.util.Log;
 
 import com.getcapacitor.JSObject;
 import com.getcapacitor.NativePlugin;
@@ -14,7 +15,13 @@ import com.ttlock.bl.sdk.callback.InitLockCallback;
 import com.ttlock.bl.sdk.callback.ScanLockCallback;
 import com.ttlock.bl.sdk.constant.ControlAction;
 import com.ttlock.bl.sdk.entity.LockError;
+class LastChanceHandler implements Thread.UncaughtExceptionHandler {
 
+    @Override
+    public void uncaughtException(Thread t, Throwable e) {
+        // Lets swallow this async exception originating from TTLock SDK and everything else...
+    }
+}
 @NativePlugin(
         permissions = {
                 Manifest.permission.BLUETOOTH,
@@ -25,23 +32,52 @@ import com.ttlock.bl.sdk.entity.LockError;
         }
 )
 public class TTLockPlugin extends Plugin {
+    @PluginMethod()
+    public void unlock(final PluginCall call) {
+        Thread.setDefaultUncaughtExceptionHandler(new LastChanceHandler());
+
+        System.out.println("Ok lets unlock");
+        final String lockData = call.getString("lockData");
+        final String lockMac = call.getString("lockMac");
+        try {
+
+            TTLockClient.getDefault().prepareBTService(getContext());
+            TTLockClient.getDefault().controlLock(ControlAction.UNLOCK, lockData, lockMac, new ControlLockCallback() {
+                @Override
+                public void onControlLockSuccess(int lockAction, int battery, int uniqueId) {
+                    final JSObject returnData = new JSObject();
+                    returnData.put("uniqueId", uniqueId);
+                    call.success(returnData);
+                }
+
+                @Override
+                public void onFail(LockError error) {
+                    call.reject(error.toString());
+                }
+            });
+        } catch (Exception ex) {
+            Log.v("a", ex.toString());
+        }
+    }
 
     @PluginMethod()
     public void echo(final PluginCall call) {
+
+        System.out.println("Ok lets go");
         final JSObject returnData = new JSObject();
-        final TTLockClient lockClient = TTLockClient.getDefault();
-        lockClient.prepareBTService(getContext());
-        lockClient.startScanLock(new ScanLockCallback() {
+
+        TTLockClient.getDefault().prepareBTService(getContext());
+        TTLockClient.getDefault().startScanLock(new ScanLockCallback() {
+
             @Override
             public void onScanLockSuccess(final ExtendedBluetoothDevice device) {
-
-                lockClient.initLock(device, new InitLockCallback() {
+                System.out.println("lock scan success");
+                TTLockClient.getDefault().initLock(device, new InitLockCallback() {
                     @Override
                     public void onInitLockSuccess(String lockData, int specialValue) {
-                        returnData.put("lockData",lockData);
-                        returnData.put("specialValue",specialValue);
+                        returnData.put("lockData", lockData);
+                        returnData.put("specialValue", specialValue);
                         call.resolve(returnData);
-                        lockClient.stopBTService();
 ////                        returnObject.put("lockData", lockData);
 ////                        returnObject.put("specialValue",specialValue);
 ////                        lockClient.controlLock(ControlAction.UNLOCK, lockData, device.getAddress(), new ControlLockCallback() {
@@ -59,19 +95,23 @@ public class TTLockPlugin extends Plugin {
 ////                            }
 ////                        });
                     }
-//
+
+                    //
                     @Override
                     public void onFail(LockError error) {
+                        System.out.println(error.toString());
 
                     }
                 });
             }
-//
+
+            //
             @Override
             public void onFail(LockError error) {
+                System.out.println(error.toString());
             }
         });
-        }
-
     }
+
+}
 
