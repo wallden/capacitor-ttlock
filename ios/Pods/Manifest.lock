@@ -1,0 +1,29 @@
+PODS:
+  - Capacitor (2.1.1):
+    - CapacitorCordova (= 2.1.1)
+  - CapacitorCordova (2.1.1)
+  - TTLock (3.0.3)
+
+DEPENDENCIES:
+  - "Capacitor (from `../node_modules/@capacitor/ios`)"
+  - "CapacitorCordova (from `../node_modules/@capacitor/ios`)"
+  - TTLock
+
+SPEC REPOS:
+  trunk:
+    - TTLock
+
+EXTERNAL SOURCES:
+  Capacitor:
+    :path: "../node_modules/@capacitor/ios"
+  CapacitorCordova:
+    :path: "../node_modules/@capacitor/ios"
+
+SPEC CHECKSUMS:
+  Capacitor: 77b85236006d70fa9c952384c29a29214f4e5544
+  CapacitorCordova: 2271de4d678eb616c5f70fe6b4d53e17e88ae171
+  TTLock: fddfcf81102147999790f6d83536a3ca1b79bdbe
+
+PODFILE CHECKSUM: 5eec36634ddfe6bffda6a01b2ccd5896e8f77241
+
+COCOAPODS: 1.9.2
