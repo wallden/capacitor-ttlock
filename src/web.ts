@@ -8,8 +8,13 @@ export class TTLockPluginWeb extends WebPlugin implements TTLockPluginPlugin {
       platforms: ['web']
     });
   }
+  async unlock(options: { lockData: string; lockMac: string; }): Promise<{ lockTime: string; uniqueId: string; }> {
+    console.log(options);
+    return { lockTime: "", uniqueId: "" };
 
-  async echo(options: { value: string }): Promise<{value: string}> {
+  }
+
+  async echo(options: { value: string }): Promise<{ value: string }> {
     console.log('ECHO', options);
     return options;
   }
