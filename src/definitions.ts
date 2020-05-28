@@ -5,5 +5,5 @@ declare module "@capacitor/core" {
 }
 
 export interface TTLockPluginPlugin {
-  echo(options: { value: string }): Promise<{value: string}>;
+  unlock(options: { lockData: string, lockMac: string }): Promise<{ lockTime: string, uniqueId: string }>;
 }

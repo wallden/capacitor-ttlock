@@ -19,6 +19,7 @@ class LastChanceHandler implements Thread.UncaughtExceptionHandler {
 
     @Override
     public void uncaughtException(Thread t, Throwable e) {
+        String s =  e.getMessage();
         // Lets swallow this async exception originating from TTLock SDK and everything else...
     }
 }
@@ -34,7 +35,7 @@ class LastChanceHandler implements Thread.UncaughtExceptionHandler {
 public class TTLockPlugin extends Plugin {
     @PluginMethod()
     public void unlock(final PluginCall call) {
-        Thread.setDefaultUncaughtExceptionHandler(new LastChanceHandler());
+        //Thread.setDefaultUncaughtExceptionHandler(new LastChanceHandler());
 
         System.out.println("Ok lets unlock");
         final String lockData = call.getString("lockData");
@@ -45,8 +46,8 @@ public class TTLockPlugin extends Plugin {
             TTLockClient.getDefault().controlLock(ControlAction.UNLOCK, lockData, lockMac, new ControlLockCallback() {
                 @Override
                 public void onControlLockSuccess(int lockAction, int battery, int uniqueId) {
-                    final JSObject returnData = new JSObject();
-                    returnData.put("uniqueId", uniqueId);
+                   final JSObject returnData = new JSObject();
+                   returnData.put("uniqueId", uniqueId);
                     call.success(returnData);
                 }
 
