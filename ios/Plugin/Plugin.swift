@@ -1,6 +1,6 @@
+import TTLock
 import Foundation
 import Capacitor
-import TTLock
 /**
  * Please read the Capacitor iOS Plugin Development Guide
  * here: https://capacitor.ionicframework.com/docs/plugins/ios
