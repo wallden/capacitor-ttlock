@@ -9,7 +9,6 @@ import Capacitor
 public class TTLockPlugin: CAPPlugin {
     @objc func setupBluetooth(_ call: CAPPluginCall){
         TTLock.setupBluetooth({ state in
-            print(String(format: "###### TTLock is working, bluetooth state: %ld ######", state.rawValue))
             call.resolve(["msg":"Bluetooth working!"]);
         })
     }
