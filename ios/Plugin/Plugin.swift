@@ -7,7 +7,7 @@ import Capacitor
  */
 @objc(TTLockPlugin)
 public class TTLockPlugin: CAPPlugin {
-    @objc func setupBluetooth(_ call: CAPPluginCall){
+    @objc func prepareBluetooth(_ call: CAPPluginCall){
         TTLock.setupBluetooth({ state in
             call.resolve(["msg":"Bluetooth working!"]);
         })

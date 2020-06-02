@@ -15,27 +15,31 @@ import com.ttlock.bl.sdk.callback.InitLockCallback;
 import com.ttlock.bl.sdk.callback.ScanLockCallback;
 import com.ttlock.bl.sdk.constant.ControlAction;
 import com.ttlock.bl.sdk.entity.LockError;
+
 class LastChanceHandler implements Thread.UncaughtExceptionHandler {
 
     @Override
     public void uncaughtException(Thread t, Throwable e) {
-        String s =  e.getMessage();
-        // Lets swallow this async exception originating from TTLock SDK and everything else...
+        String s = e.getMessage();
+        // Lets swallow this async exception originating from TTLock SDK and everything
+        // else...
     }
 }
-@NativePlugin(
-        permissions = {
-                Manifest.permission.BLUETOOTH,
-                Manifest.permission.BLUETOOTH_ADMIN,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.INTERNET,
-                Manifest.permission.ACCESS_NETWORK_STATE
-        }
-)
+
+@NativePlugin(permissions = { Manifest.permission.BLUETOOTH, Manifest.permission.BLUETOOTH_ADMIN,
+        Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.INTERNET,
+        Manifest.permission.ACCESS_NETWORK_STATE })
 public class TTLockPlugin extends Plugin {
     @PluginMethod()
+    public void prepareBluetooth(final PluginCall call) {
+        final JSObject returnData = new JSObject();
+        returnData.put("success", true);
+        call.resolve(returnData);
+    }
+
+    @PluginMethod()
     public void unlock(final PluginCall call) {
-        //Thread.setDefaultUncaughtExceptionHandler(new LastChanceHandler());
+        // Thread.setDefaultUncaughtExceptionHandler(new LastChanceHandler());
 
         System.out.println("Ok lets unlock");
         final String lockData = call.getString("lockData");
@@ -46,8 +50,8 @@ public class TTLockPlugin extends Plugin {
             TTLockClient.getDefault().controlLock(ControlAction.UNLOCK, lockData, lockMac, new ControlLockCallback() {
                 @Override
                 public void onControlLockSuccess(int lockAction, int battery, int uniqueId) {
-                   final JSObject returnData = new JSObject();
-                   returnData.put("uniqueId", uniqueId);
+                    final JSObject returnData = new JSObject();
+                    returnData.put("uniqueId", uniqueId);
                     call.success(returnData);
                 }
 
@@ -79,22 +83,24 @@ public class TTLockPlugin extends Plugin {
                         returnData.put("lockData", lockData);
                         returnData.put("specialValue", specialValue);
                         call.resolve(returnData);
-////                        returnObject.put("lockData", lockData);
-////                        returnObject.put("specialValue",specialValue);
-////                        lockClient.controlLock(ControlAction.UNLOCK, lockData, device.getAddress(), new ControlLockCallback() {
-////                            @Override
-////                            public void onControlLockSuccess(int lockAction, int battery, int uniqueId) {
-////                                returnObject.put("lockAction",lockAction);
-////                                returnObject.put("battery",battery);
-////                                returnObject.put("uniqueId",uniqueId);
-////                                //lockClient.stopBTService();
-////                                //call.resolve(returnObject);
-////                            }
-////                            @Override
-////                            public void onFail(LockError error) {
-////
-////                            }
-////                        });
+                        //// returnObject.put("lockData", lockData);
+                        //// returnObject.put("specialValue",specialValue);
+                        //// lockClient.controlLock(ControlAction.UNLOCK, lockData, device.getAddress(),
+                        //// new ControlLockCallback() {
+                        //// @Override
+                        //// public void onControlLockSuccess(int lockAction, int battery, int uniqueId)
+                        //// {
+                        //// returnObject.put("lockAction",lockAction);
+                        //// returnObject.put("battery",battery);
+                        //// returnObject.put("uniqueId",uniqueId);
+                        //// //lockClient.stopBTService();
+                        //// //call.resolve(returnObject);
+                        //// }
+                        //// @Override
+                        //// public void onFail(LockError error) {
+                        ////
+                        //// }
+                        //// });
                     }
 
                     //
@@ -115,4 +121,3 @@ public class TTLockPlugin extends Plugin {
     }
 
 }
-
