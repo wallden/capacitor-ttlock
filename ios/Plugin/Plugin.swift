@@ -7,15 +7,22 @@ import Capacitor
  */
 @objc(TTLockPlugin)
 public class TTLockPlugin: CAPPlugin {
+    var bluetoothPrepared = false;
     @objc func prepareBluetooth(_ call: CAPPluginCall){
-        TTLock.setupBluetooth({ state in
-            call.resolve(["msg":"Bluetooth working!"]);
-        })
+        if self.bluetoothPrepared == false {
+            TTLock.setupBluetooth({ state in
+            self.bluetoothPrepared = true;
+            call.resolve(["msg":"Bluetooth prepared successfully!"]);
+        });
+        }
+        else {
+            call.resolve(["msg":"Bluetooth already prepared!"]);
+        }
+        
     }
 
     @objc func unlock(_ call: CAPPluginCall) {
         let lockData = call.getString("lockData");
-        //let lockMac = call.getString("lockMac");
         TTLock.controlLock(with: TTControlAction.actionUnlock, lockData:lockData,success:{lockTime,electricQuantity,uniqueId in
             print(String(format: "###### Unlock success power %ld #####",electricQuantity))
             call.resolve(["uniqueId":uniqueId,"electricQuantity":electricQuantity]);
