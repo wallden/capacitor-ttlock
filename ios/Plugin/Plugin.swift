@@ -32,4 +32,14 @@ public class TTLockPlugin: CAPPlugin {
             call.reject(errorMsg ?? "");
         });
     }
+        @objc func initializeLock(_ call: CAPPluginCall) {
+        TTLock.controlLock(with: TTControlAction.actionUnlock, lockData:lockData,success:{lockTime,electricQuantity,uniqueId in
+            print(String(format: "###### Unlock success power %ld #####",electricQuantity))
+            call.resolve(["uniqueId":uniqueId,"electricQuantity":electricQuantity]);
+        }, failure: {
+            errorCode,errorMsg in
+            print("######## Unlock failed errorMsg: \(errorMsg ?? "") ######");
+            call.reject(errorMsg ?? "");
+        });
+    }
 }

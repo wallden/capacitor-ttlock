@@ -5,4 +5,5 @@
 CAP_PLUGIN(TTLockPlugin, "TTLockPlugin",
            CAP_PLUGIN_METHOD(unlock, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(prepareBluetooth, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(initializeLock, CAPPluginReturnPromise);
 )
