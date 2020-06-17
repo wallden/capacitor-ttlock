@@ -33,13 +33,29 @@ public class TTLockPlugin: CAPPlugin {
         });
     }
         @objc func initializeLock(_ call: CAPPluginCall) {
-        TTLock.controlLock(with: TTControlAction.actionUnlock, lockData:lockData,success:{lockTime,electricQuantity,uniqueId in
-            print(String(format: "###### Unlock success power %ld #####",electricQuantity))
-            call.resolve(["uniqueId":uniqueId,"electricQuantity":electricQuantity]);
-        }, failure: {
-            errorCode,errorMsg in
-            print("######## Unlock failed errorMsg: \(errorMsg ?? "") ######");
-            call.reject(errorMsg ?? "");
-        });
+            print(String("INITALIZING"));
+            TTLock.startScan({ scanModel in
+                print(String("scanModel?"));
+                if(scanModel?.lockMac){
+                    print(String("stopping scan"));
+                    TTLock.stopScan();
+                    var lockDict = [
+                        "lockMac":scanModel?.lockMac,
+                        "lockName":scanModel?.lockName,
+                        "lockVersion":scanModel?.lockVersion
+                    ];
+                    TTLock.initLock(withDict: lockDict, success: {lockData, specialValue in
+                        print(String("INIT LOCK SUCCESS"));
+                        call.resolve(["lockData":lockData,"specialValue":specialValue]);
+                    }, failure: {errorCode, errorMsg in
+                        call.reject(errorMsg ?? "Failed to init lock");
+                    })
+                }
+                else
+                {
+                    print(String("No lockmac..."))
+                }
+                
+            });
     }
 }
