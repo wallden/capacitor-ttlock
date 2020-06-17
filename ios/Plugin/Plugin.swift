@@ -36,7 +36,7 @@ public class TTLockPlugin: CAPPlugin {
             print(String("INITALIZING"));
             TTLock.startScan({ scanModel in
                 print(String("scanModel?"));
-                if(scanModel?.lockMac){
+                if(scanModel?.lockMac != nil){
                     print(String("stopping scan"));
                     TTLock.stopScan();
                     var lockDict = [
@@ -44,10 +44,12 @@ public class TTLockPlugin: CAPPlugin {
                         "lockName":scanModel?.lockName,
                         "lockVersion":scanModel?.lockVersion
                     ];
+                    print(String("Ok lets init LOCK"));
                     TTLock.initLock(withDict: lockDict, success: {lockData, specialValue in
                         print(String("INIT LOCK SUCCESS"));
                         call.resolve(["lockData":lockData,"specialValue":specialValue]);
                     }, failure: {errorCode, errorMsg in
+                        print(errorMsg);
                         call.reject(errorMsg ?? "Failed to init lock");
                     })
                 }
