@@ -37,7 +37,7 @@ public class TTLockPlugin: CAPPlugin {
         let startDate = call.getString("startDate");
         let endDate = call.getString("endDate");
         let passcode = call.getString("passcode");
-     TTLock.createCustomPasscode(passcode, startDate: startDate, endDate: endDate, lockData: lockModel.lockData, success: {
+     TTLock.createCustomPasscode(passcode, startDate: startDate, endDate: endDate, lockData: lockData, success: {
          call.resolve();
 }, failure: { errorCode, errorMsg in
     print("##############  error: \(errorMsg ?? "")  ##############");
