@@ -34,10 +34,10 @@ public class TTLockPlugin: CAPPlugin {
     }
     @objc func registerPasscode(_ call: CAPPluginCall) {
         let lockData = call.getString("lockData");
-        let startDate = call.getString("startDate");
-        let endDate = call.getString("endDate");
+        let startDate = call.getString("startDate")!;
+        let endDate = call.getString("endDate")!;
         let passcode = call.getString("passcode");
-     TTLock.createCustomPasscode(passcode, startDate: startDate, endDate: endDate, lockData: lockData, success: {
+     TTLock.createCustomPasscode(passcode, startDate: Int64(startDate), endDate: Int64(endDate), lockData: lockData, success: {
          call.resolve();
 }, failure: { errorCode, errorMsg in
     print("##############  error: \(errorMsg ?? "")  ##############");
