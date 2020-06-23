@@ -42,7 +42,7 @@ public class TTLockPlugin: CAPPlugin {
 }, failure: { errorCode, errorMsg in
     print("##############  error: \(errorMsg ?? "")  ##############");
     call.reject(errorMsg ?? "");
-})
+});
 
     }
     @objc func initializeLock(_ call: CAPPluginCall) {
