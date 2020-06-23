@@ -32,7 +32,20 @@ public class TTLockPlugin: CAPPlugin {
             call.reject(errorMsg ?? "");
         });
     }
-        @objc func initializeLock(_ call: CAPPluginCall) {
+    @objc func registerPasscode(_ call: CAPPluginCall) {
+        let lockData = call.getString("lockData");
+        let startDate = call.getString("startDate");
+        let endDate = call.getString("endDate");
+        let passcode = call.getString("passcode");
+     TTLock.createCustomPasscode(customPasscode, startDate: startDate, endDate: endDate, lockData: lockModel.lockData, success: {
+         call.resolve();
+}, failure: { errorCode, errorMsg in
+    print("##############  error: \(errorMsg ?? "")  ##############");
+    call.reject(errorMsg ?? "");
+})
+
+    }
+    @objc func initializeLock(_ call: CAPPluginCall) {
             print(String("INITALIZING"));
             TTLock.startScan({ scanModel in
                 print(String("scanModel?"));
